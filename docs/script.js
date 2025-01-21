@@ -6,6 +6,30 @@ const cuePoints = [
 	303.067
 ]
 
+function renderCuePoints() {
+	const cuePointsContainer = document.querySelector('.cuepoints-bar')
+	// Clear existing cue points
+	while (cuePointsContainer.firstChild) {
+		cuePointsContainer.removeChild(cuePointsContainer.firstChild)
+	}
+	cuePoints.forEach((cuePoint, index) => {
+		const cuePointElement = document.createElement('div')
+		cuePointElement.classList.add('cuepoints-bar__cuepoint')
+		cuePointsContainer.appendChild(cuePointElement)
+	})
+}
+
+function setCuePoint(index) {
+	const points = document.querySelectorAll('.cuepoints-bar__cuepoint')
+	points.forEach((point, i) => {
+		if (i === index) {
+			point.classList.add('cuepoints-bar__cuepoint--active')
+		} else {
+			point.classList.remove('cuepoints-bar__cuepoint--active')
+		}
+	})
+}
+
 function documentReady() {
 	return new Promise((resolve) => {
 		document.addEventListener('DOMContentLoaded', () => {
@@ -15,6 +39,9 @@ function documentReady() {
 }
 
 function videoReady(video) {
+	if (video.readyState >= 1) {
+		return Promise.resolve()
+	}
 	return new Promise((resolve) => {
 		video.addEventListener('loadedmetadata', () => {
 			resolve()
@@ -26,13 +53,16 @@ function videoReady(video) {
 }
 
 documentReady()
+	.then(() => {
+		renderCuePoints()
+		setCuePoint(0)
+	})
 	.then(() => videoReady(document.querySelector('#video')))
 	.then(() => {
 		const video = document.querySelector('#video')
 		let currentCuePoint = 0
-		console.log('Video ready', video.duration)
 
-		const playButton = document.querySelector('#play')
+		console.log('Video ready', video.duration)
 		const overlay = document.querySelector('.video-container__video-overlay')
 
 		video.addEventListener('timeupdate', () => {
@@ -45,6 +75,7 @@ documentReady()
 			})
 			if (prevCuePoint !== currentCuePoint) {
 				console.log('Cue point reached:', currentCuePoint)
+				setCuePoint(currentCuePoint)
 			}
 		})
 
@@ -60,16 +91,6 @@ documentReady()
 			overlay.style.display = 'flex'
 		})
 
-		playButton.addEventListener('click', () => {
-			video.play()
-			cuePoints.forEach((cuePoint, index) => {
-				if (video.currentTime > cuePoint) {
-					currentCuePoint = index
-					return
-				}
-			})
-		})
-
 		document.querySelector('#prev').addEventListener('click', () => {
 			currentCuePoint = Math.max(
 				0,
@@ -79,6 +100,7 @@ documentReady()
 			)
 			video.currentTime = cuePoints[currentCuePoint]
 			console.log('Playing from last cue point:', currentCuePoint)
+			setCuePoint(currentCuePoint)
 		})
 
 		document.querySelector('#next').addEventListener('click', () => {
@@ -86,5 +108,9 @@ documentReady()
 				video.currentTime = cuePoints[currentCuePoint + 1]
 				console.log('Playing from next cue point:', currentCuePoint + 1)
 			}
+		})
+
+		document.querySelector('#play').addEventListener('click', () => {
+			video.play()
 		})
 	})
