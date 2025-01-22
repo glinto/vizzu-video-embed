@@ -37,7 +37,7 @@ body {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.8);
+	background-color: rgba(0, 0, 0, 0.4);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -64,6 +64,23 @@ body {
 
 .video-container__controls button {
 	padding: 12px 12px;
+}
+
+.video-container__video-overlay button {
+	padding: 2rem;
+	background-color: rgba(0, 0, 0, 0.4);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	transition: background-color 0.3s ease-out;
+}
+
+.video-container__video-overlay button:hover,
+.video-container__video-overlay button:active {
+	background-color: var(--vizzu-medium-blue);
+}
+
+.video-container__video-overlay button span {
+	font-size: 3rem;
 }
 
 .cuepoints-bar {
