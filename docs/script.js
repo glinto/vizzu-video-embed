@@ -5,6 +5,32 @@ const cuePoints = [
 	190.267, 207.633, 214.233, 228.633, 240.167, 253.133, 258.733, 268.733, 271.933, 284.667,
 	303.067
 ]
+const cuePointLabels = [
+	'Intro',
+	'Welcome & Goals',
+	'Revenue Analysis',
+	'Profit Trends',
+	'Revenue vs. Profit',
+	'Q4 Profit Drop',
+	'Product-Level Breakdown',
+	'Loss-Making Products',
+	'Industry Impact',
+	'Country Impact',
+	'Discount Effect',
+	'High-Discount Regions',
+	'Ranking Losses',
+	'Product Performance by Country',
+	'Key Loss-Driving Products',
+	'Regional Product Losses',
+	'Summary of Findings',
+	'Presentation Prep',
+	'Profit Modeling',
+	'Original vs. Modeled Profit',
+	'Visualizing Profit Impact',
+	'Refining Analysis',
+	'Potential Gains',
+	'Final Insights'
+]
 
 let currentCuePoint = 0
 
@@ -23,14 +49,17 @@ function renderCuePoints() {
 		cuePointElement.addEventListener('click', (event) => {
 			const index = parseInt(event.target.getAttribute('data-index'))
 			const video = document.querySelector('#video')
-			video.currentTime = cuePoints[index]
-			console.log('Playing from cue point:', index)
-			setCuePoint(index)
+			gotoCuePoint(index)
+			video.pause()
+			updateCuePoint(index)
 		})
 	})
 }
 
-function setCuePoint(index) {
+/**
+ * Update the active cue point in the cue points bar
+ */
+function updateCuePoint(index) {
 	const points = document.querySelectorAll('.cuepoints-bar__cuepoint')
 	points.forEach((point, i) => {
 		if (i === index) {
@@ -39,6 +68,15 @@ function setCuePoint(index) {
 			point.classList.remove('cuepoints-bar__cuepoint--active')
 		}
 	})
+	const title =
+		index === 0 ? (cuePointLabels[index] ?? '') : `Next: ${cuePointLabels[index] ?? ''}`
+	document.querySelector('.video-container__chapter-title').innerText = title
+}
+
+function gotoCuePoint(index) {
+	const video = document.querySelector('#video')
+	video.currentTime = cuePoints[index]
+	//updateCuePoint(index)
 }
 
 function documentReady() {
@@ -66,7 +104,7 @@ function videoReady(video) {
 documentReady()
 	.then(() => {
 		renderCuePoints()
-		setCuePoint(0)
+		updateCuePoint(0)
 	})
 	.then(() => videoReady(document.querySelector('#video')))
 	.then(() => {
@@ -85,7 +123,8 @@ documentReady()
 			})
 			if (prevCuePoint !== currentCuePoint) {
 				console.log('Cue point reached:', currentCuePoint)
-				setCuePoint(currentCuePoint)
+				video.pause()
+				updateCuePoint(currentCuePoint)
 			}
 		})
 
@@ -108,15 +147,15 @@ documentReady()
 					? currentCuePoint
 					: currentCuePoint - 1
 			)
-			video.currentTime = cuePoints[currentCuePoint]
+			gotoCuePoint(currentCuePoint)
 			console.log('Playing from last cue point:', currentCuePoint)
-			setCuePoint(currentCuePoint)
+			updateCuePoint(currentCuePoint)
 			video.pause()
 		})
 
 		document.querySelector('#next').addEventListener('click', () => {
 			if (currentCuePoint < cuePoints.length - 1) {
-				video.currentTime = cuePoints[currentCuePoint + 1]
+				gotoCuePoint(currentCuePoint + 1)
 				console.log('Playing from next cue point:', currentCuePoint + 1)
 			}
 		})
