@@ -79,6 +79,24 @@ function gotoCuePoint(index) {
 	//updateCuePoint(index)
 }
 
+function next() {
+	if (currentCuePoint < cuePoints.length - 1) {
+		gotoCuePoint(currentCuePoint + 1)
+		console.log('Playing from next cue point:', currentCuePoint + 1)
+	}
+}
+
+function prev() {
+	currentCuePoint = Math.max(
+		0,
+		video.currentTime > cuePoints[currentCuePoint] + 0.5 ? currentCuePoint : currentCuePoint - 1
+	)
+	gotoCuePoint(currentCuePoint)
+	console.log('Playing from last cue point:', currentCuePoint)
+	updateCuePoint(currentCuePoint)
+	video.pause()
+}
+
 function documentReady() {
 	return new Promise((resolve) => {
 		document.addEventListener('DOMContentLoaded', () => {
@@ -140,24 +158,26 @@ documentReady()
 			overlay.style.display = 'flex'
 		})
 
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'ArrowRight') {
+				next()
+			}
+			if (event.key === 'ArrowLeft') {
+				prev()
+			}
+			if (event.key === ' ') {
+				if (video.paused) {
+					video.play()
+				}
+			}
+		})
+
 		document.querySelector('#prev').addEventListener('click', () => {
-			currentCuePoint = Math.max(
-				0,
-				video.currentTime > cuePoints[currentCuePoint] + 0.5
-					? currentCuePoint
-					: currentCuePoint - 1
-			)
-			gotoCuePoint(currentCuePoint)
-			console.log('Playing from last cue point:', currentCuePoint)
-			updateCuePoint(currentCuePoint)
-			video.pause()
+			prev()
 		})
 
 		document.querySelector('#next').addEventListener('click', () => {
-			if (currentCuePoint < cuePoints.length - 1) {
-				gotoCuePoint(currentCuePoint + 1)
-				console.log('Playing from next cue point:', currentCuePoint + 1)
-			}
+			next()
 		})
 
 		document.querySelector('#play').addEventListener('click', () => {
