@@ -6,7 +6,6 @@ const cuePoints = [
 	303.067
 ]
 const cuePointLabels = [
-	'Intro',
 	'Welcome & Goals',
 	'Revenue Analysis',
 	'Profit Trends',
@@ -29,7 +28,8 @@ const cuePointLabels = [
 	'Visualizing Profit Impact',
 	'Refining Analysis',
 	'Potential Gains',
-	'Final Insights'
+	'Final Insights',
+	'Epilogue'
 ]
 
 let currentCuePoint = 0
