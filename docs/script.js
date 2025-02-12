@@ -68,21 +68,32 @@ function updateCuePoint(index) {
 			point.classList.remove('cuepoints-bar__cuepoint--active')
 		}
 	})
-	const title =
-		index === 0 ? (cuePointLabels[index] ?? '') : `Next: ${cuePointLabels[index] ?? ''}`
-	document.querySelector('.video-container__chapter-title').innerText = title
+	document.querySelector('.video-container__chapter-title div').innerText =
+		cuePointLabels[index] ?? ''
 }
 
 function gotoCuePoint(index) {
 	const video = document.querySelector('#video')
 	video.currentTime = cuePoints[index]
-	//updateCuePoint(index)
+	currentCuePoint = index
+	updateCuePoint(index)
+}
+
+function playToggle() {
+	const video = document.querySelector('#video')
+	if (video.paused) {
+		video.play()
+		//currentCuePoint = getCuePointUnderPlayhead()
+		//updateCuePoint(currentCuePoint)
+	} else {
+		video.pause()
+	}
 }
 
 function next() {
 	if (currentCuePoint < cuePoints.length - 1) {
-		gotoCuePoint(currentCuePoint + 1)
 		console.log('Playing from next cue point:', currentCuePoint + 1)
+		gotoCuePoint(currentCuePoint + 1)
 	}
 }
 
@@ -95,6 +106,18 @@ function prev() {
 	console.log('Playing from last cue point:', currentCuePoint)
 	updateCuePoint(currentCuePoint)
 	video.pause()
+}
+
+function getCuePointUnderPlayhead() {
+	const video = document.querySelector('#video')
+	const currentTime = video.currentTime
+	let cuePointIndex = 0
+	cuePoints.forEach((cuePoint, index) => {
+		if (currentTime >= cuePoint) {
+			cuePointIndex = index
+		}
+	})
+	return cuePointIndex
 }
 
 function documentReady() {
@@ -129,34 +152,26 @@ documentReady()
 		const video = document.querySelector('#video')
 
 		console.log('Video ready', video.duration)
-		const overlay = document.querySelector('.video-container__video-overlay')
 
 		video.addEventListener('timeupdate', () => {
-			let prevCuePoint = currentCuePoint
-			cuePoints.forEach((cuePoint, index) => {
-				if (video.currentTime >= cuePoint) {
-					currentCuePoint = index
-					return
-				}
-			})
-			if (prevCuePoint !== currentCuePoint) {
-				console.log('Cue point reached:', currentCuePoint)
+			const cue = getCuePointUnderPlayhead()
+			if (cue > currentCuePoint) {
+				console.log('Reached cue point:', cue)
 				video.pause()
-				updateCuePoint(currentCuePoint)
+				currentCuePoint = cue
+				updateCuePoint(cue)
 			}
 		})
 
 		video.addEventListener('play', () => {
-			overlay.style.display = 'none'
+			document.querySelector('#play span').innerText = 'pause'
 		})
 
 		video.addEventListener('pause', () => {
-			overlay.style.display = 'flex'
+			document.querySelector('#play span').innerText = 'play_arrow'
 		})
 
-		video.addEventListener('ended', () => {
-			overlay.style.display = 'flex'
-		})
+		video.addEventListener('ended', () => {})
 
 		document.addEventListener('keydown', (event) => {
 			if (event.key === 'ArrowRight') {
@@ -166,9 +181,7 @@ documentReady()
 				prev()
 			}
 			if (event.key === ' ') {
-				if (video.paused) {
-					video.play()
-				}
+				playToggle()
 			}
 		})
 
@@ -181,6 +194,6 @@ documentReady()
 		})
 
 		document.querySelector('#play').addEventListener('click', () => {
-			video.play()
+			playToggle()
 		})
 	})

@@ -11,9 +11,7 @@
 	--video-aspect-ratio: calc(var(--video-target-width) / var(--video-target-height));
 	--video-controls-height: calc(var(--video-target-height) * var(--video-controls-height-ratio));
 	--video-controls-aspect-ratio: calc(var(--video-target-width) / var(--video-controls-height));
-	--video-container-aspect-ratio: calc(
-		var(--video-target-width) / (var(--video-target-height) + var(--video-controls-height))
-	);
+
 	--controls-gap: 0.25rem;
 	--controls-font-size: 1.25rem;
 	--font-size-h1: 1.5rem;
@@ -84,7 +82,13 @@ body {
 
 .video-container__chapter-title {
 	font-size: var(--font-size-h1);
-	color: white;
+	color: var(--vizzu-medium-blue);
+	aspect-ratio: var(--video-controls-aspect-ratio);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--controls-gap);
+	box-sizing: border-box;
 }
 
 .video-container__controls {
@@ -94,6 +98,7 @@ body {
 	padding: var(--controls-gap);
 	aspect-ratio: var(--video-controls-aspect-ratio);
 	gap: var(--controls-gap);
+	box-sizing: border-box;
 }
 
 .video-container button {

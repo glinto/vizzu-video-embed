@@ -6,28 +6,26 @@
 	</head>
 	<body>
 		<div class="video-container">
+			<div class="video-container__chapter-title">
+				<div></div>
+			</div>
 			<div class="video-container__video-area">
 				<video id="video" autoplay>
 					<source src="video.mp4" type="video/mp4" />
 				</video>
-				<div class="video-container__video-overlay">
-					<div class="video-container__chapter-title"></div>
-					<div>
-						<button id="play">
-							<span class="material-symbols-outlined">play_arrow</span>
-						</button>
-					</div>
-				</div>
 			</div>
 
 			<div class="video-container__controls">
 				<button id="prev">
 					<span class="material-symbols-outlined">skip_previous</span>
 				</button>
-				<div class="cuepoints-bar"></div>
+				<button id="play">
+					<span class="material-symbols-outlined">play_arrow</span>
+				</button>
 				<button id="next">
 					<span class="material-symbols-outlined">skip_next</span>
 				</button>
+				<div class="cuepoints-bar"></div>
 			</div>
 		</div>
 		<script src="script.js" type="module"></script>
