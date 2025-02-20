@@ -1,9 +1,8 @@
 console.log('Video page loaded')
 
 const cuePoints = [
-	0, 11.0, 34.167, 49.0, 59.367, 78.333, 90.767, 102.9, 114.0, 128.4, 135.867, 162.933, 180.767,
-	190.267, 207.633, 214.233, 228.633, 240.167, 253.133, 258.733, 268.733, 271.933, 284.667,
-	303.067
+	0, 8.233, 20.2, 28.433, 35.133, 45.033, 51.8, 61.667, 69.767, 78.533, 94.1, 117.867, 139.133,
+	158.5, 167.567, 172.3, 185.567, 190.233, 200.0, 204.7, 220.733
 ]
 const cuePointLabels = [
 	'Welcome & Goals',
@@ -16,20 +15,17 @@ const cuePointLabels = [
 	'Industry Impact',
 	'Country Impact',
 	'Discount Effect',
-	'High-Discount Regions',
-	'Ranking Losses',
-	'Product Performance by Country',
+	'High-Discount Countries',
 	'Key Loss-Driving Products',
-	'Regional Product Losses',
+	'Other Products in Bad Countries',
+	'Problematic Products Worldwide',
 	'Summary of Findings',
 	'Presentation Prep',
 	'Profit Modeling',
-	'Original vs. Modeled Profit',
+	'Profit wo. Loss-Generating Items',
 	'Visualizing Profit Impact',
-	'Refining Analysis',
-	'Potential Gains',
 	'Final Insights',
-	'Epilogue'
+	'Go Crush It, Alex!'
 ]
 
 let currentCuePoint = 0
