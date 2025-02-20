@@ -4,6 +4,7 @@
 :root {
 	--vizzu-medium-blue: #7295d5;
 	--vizzu-medium-blue-rgb: 114, 149, 213;
+	--vizzu-title-blue: #5a608d;
 	--vizzu-font: 'League Spartan', sans-serif;
 	--video-target-width: 1440;
 	--video-target-height: 751;
@@ -82,7 +83,7 @@ body {
 
 .video-container__chapter-title {
 	font-size: var(--font-size-h1);
-	color: var(--vizzu-medium-blue);
+	color: var(--vizzu-title-blue);
 	aspect-ratio: var(--video-controls-aspect-ratio);
 	display: flex;
 	align-items: center;
