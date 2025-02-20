@@ -28,7 +28,10 @@ const cuePointLabels = [
 	'Go Crush It, Alex!'
 ]
 
+const CUEPOINT_DEADZONE = 0.2
+
 let currentCuePoint = 0
+let stoppedBeforeCue = false
 
 function renderCuePoints() {
 	const cuePointsContainer = document.querySelector('.cuepoints-bar')
@@ -88,12 +91,14 @@ function playToggle() {
 
 function next() {
 	if (currentCuePoint < cuePoints.length - 1) {
+		stoppedBeforeCue = false
 		console.log('Playing from next cue point:', currentCuePoint + 1)
 		gotoCuePoint(currentCuePoint + 1)
 	}
 }
 
 function prev() {
+	stoppedBeforeCue = false
 	currentCuePoint = Math.max(
 		0,
 		video.currentTime > cuePoints[currentCuePoint] + 0.5 ? currentCuePoint : currentCuePoint - 1
@@ -125,7 +130,7 @@ function documentReady() {
 }
 
 function videoReady(video) {
-	if (video.readyState >= 1) {
+	if (video.readyState >= 2) {
 		return Promise.resolve()
 	}
 	return new Promise((resolve) => {
@@ -151,11 +156,20 @@ documentReady()
 
 		video.addEventListener('timeupdate', () => {
 			const cue = getCuePointUnderPlayhead()
-			if (cue > currentCuePoint) {
-				console.log('Reached cue point:', cue)
+			if (
+				!stoppedBeforeCue &&
+				currentCuePoint < cuePoints.length - 1 &&
+				video.currentTime >= cuePoints[currentCuePoint + 1] - CUEPOINT_DEADZONE
+			) {
+				console.log('Stopped before cue point', currentCuePoint + 1, video.currentTime)
+				stoppedBeforeCue = true
 				video.pause()
+			}
+			if (cue > currentCuePoint && video.currentTime >= cuePoints[cue] + CUEPOINT_DEADZONE) {
+				console.log('Reached cue point:', cue)
 				currentCuePoint = cue
 				updateCuePoint(cue)
+				stoppedBeforeCue = false
 			}
 		})
 
